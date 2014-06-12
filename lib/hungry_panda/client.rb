@@ -1,8 +1,9 @@
-require 'rest-client'
+require 'hungry_panda/service/plan'
+require 'hungry_panda/plan'
 
 module HungryPanda
   class Client
-    attr_accessor :base_url, :username, :password, :format
+    
   
     #notes
     #probably need one object for BambooClient, another for BambooPlan, and another for BambooBuild
@@ -15,24 +16,45 @@ module HungryPanda
       #need to figure out what version to use, how can we let people control this?
       @username = options.fetch(:username)
       @password = options.fetch(:password)
-      domain = options.fetch(:domain)
-      @format = '.json'
-      @base_url = "https://#{username}:#{password}@#{domain}/rest/api/latest/"
+      @domain = options.fetch(:domain)
+      @format = options.fetch(:format) { '.json' }
     end
 
-    #What if there are more than 1000 plans?
+
     def plans
-      response = RestClient.get "#{base_url}plan#{format}", 'expand' => 'plans', 'max-results' => '1000'
-      parsed_hash = JSON.parse(response.body)
-      plan_list = parsed_hash['plans']['plan']
+      plan_list = Service::Plan.new(url).all
 
-      return plan_list.map{|p| Plan.new(self, p['key'])}
+      plan_list.map{|p| Plan.new(url, p['key'])}
     end
+    
+    def plan(key)
+      Plan.new(url, key)
+    end
+    
+    #def projects
+    #  response = RestClient.get projects_endpoint, projects_params
+    #  parsed_hash = JSON.parse(response.body)
+    #  project_list = parsed_hash['projects']['project']
+      
+    #  project_list.map{|project| Project.new(self, project['key']) }
+    #end
 
+    private
+    attr_accessor :username, :password, :domain, :format
+    
+    def url
+      "https://#{username}:#{password}@#{domain}/rest/api/latest/"
+    end
+    
+    
+    def projects_endpoint
+      "#{url}project#{format}"
+    end
+    
+    def projects_params
+      { 'expand' => 'projects', 'max-results' => '1000' }
+    end 
   end
   
-  class Plan
-    def initialize(connection, key)
-    end
-  end
+  
 end

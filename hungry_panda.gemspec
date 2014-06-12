@@ -23,6 +23,13 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "dotenv"
-
+  
+  spec.add_development_dependency "webmock"
+  spec.add_development_dependency "vcr"
+  
+  spec.add_development_dependency "pry-rescue"
+  spec.add_development_dependency "pry-debugger"
+  spec.add_development_dependency "pry-stack_explorer"
+  
   spec.add_runtime_dependency "rest-client"
 end
