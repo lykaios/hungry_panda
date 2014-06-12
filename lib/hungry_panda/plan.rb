@@ -9,7 +9,7 @@ module HungryPanda
     def latest_build    
       build_hash = Service::Build.new(base_url, key).latest
   
-      Build.new(build_hash)
+      Build.new(base_url, build_hash)
     end  
     
     def name

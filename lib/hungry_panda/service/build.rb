@@ -25,8 +25,12 @@ module HungryPanda
         JSON.parse(response)
       end
       
-      
-      
+      def specific_build(number)
+        url = @base_url + "result/#{key}-#{number + format}"
+        response = RestClient.get(url)
+        
+        JSON.parse(response)
+      end
       
       private
       attr_reader :base_url

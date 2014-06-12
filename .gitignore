@@ -139,6 +139,7 @@ config/secrets.yml
 /test/tmp/
 /test/version_tmp/
 /tmp/
+/fixtures/vcr_cassettes/
 
 ## Specific to RubyMotion:
 .dat*
